@@ -14,19 +14,26 @@
     & h2 {
         color: #fff;
         font-size: 2rem;
+        width: 100%;
     }
 
-    .tracklist {
-        display: flex;
-        flex-direction: column;
-        flex-wrap: nowrap;
-        justify-content: space-between;
-        align-items: flex-start;
-        margin: 10px auto;
-        max-width: 1200px;
+    #playlist-name {
         width: 100%;
-        gap: 10px;
+        height: 3rem;
+        border: none;
+        border-bottom: 2px solid #fff;
+        padding: 0 10px;
+        font-size: 1.2rem;
+        font-weight: 400;
+        color: #fff;
+        background-color: transparent;
+        outline: none;
+
+        &:focus {
+            background-color: #cb0efa;
+        }
     }
+
 
     .playlist-save {
         align-self: center;

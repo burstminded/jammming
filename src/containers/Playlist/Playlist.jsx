@@ -1,36 +1,35 @@
 import Tracklist from "../../components/Tracklist/Tracklist";
+import PropTypes from "prop-types";
+import { useState } from "react";
 import "./Playlist.css";
 
-function Playlist() {
+function Playlist({ playlistTracks, onRemoveTrack }) {
 
-    const playlistTracks = [
-        {
-            name: 'Tiny Dancer',
-            artist: 'Elton John',
-            album: 'Madman Across The Water',
-            id: 1
-        },
-        {
-            name: 'Tiny Dancer',
-            artist: 'Tim McGraw',
-            album: 'Love Story',
-            id: 2
-        },
-        {
-            name: 'Tiny Dancer',
-            artist: 'Rockabye Baby!',
-            album: 'Lullaby Renditions of Elton John',
-            id: 3
-        }
-    ];
+    const [isEditing, setIsEditing] = useState(false);
+    const [playlistName, setPlaylistName] = useState('');
+
+    const handleBlur = ({ target }) => {
+        setPlaylistName(target.value);
+        setIsEditing(false);
+    }
+
+    const handleChange = ({ target }) => {
+        setPlaylistName(target.value);
+    }
 
     return (
         <div className='playlist'>  
-            <h2>{Playlist.name || 'Playlist'}</h2>
-                <Tracklist tracksArray={playlistTracks} />
+            { !isEditing ? <h2 onClick={() => setIsEditing(true)}>{playlistName || 'Playlist'}</h2> : <input type="text" name="playlist-name" id="playlist-name" value={playlistName} onChange={handleChange} onBlur={handleBlur} />}
+                <Tracklist tracksArray={playlistTracks} isPlaylist={true} onRemoveTrack={onRemoveTrack}/>
             <button className='playlist-save'>SAVE TO SPOTIFY</button>
         </div>
     );
 }
 
+Playlist.propTypes = {
+    playlistTracks: PropTypes.array.isRequired,
+    onRemoveTrack: PropTypes.func.isRequired,
+};
+
 export default Playlist;
+
