@@ -1,15 +1,24 @@
 import './Track.css';
 
-function Track(){
+import PropTypes from 'prop-types';
+
+
+function Track({ trackName, artist, album }) {
     return (
         <div className='track'>
             <div className='track-information'>
-                <h3>Track Name</h3>
-                <p>Track Artist | Track Album</p>
+                <h3>{trackName}</h3>
+                <p>{`${artist} | ${album}`}</p>
             </div>
             <button className='track-action'>+</button>
         </div>
     );
 }
+
+Track.propTypes = {
+    trackName: PropTypes.string.isRequired,
+    artist: PropTypes.string.isRequired,
+    album: PropTypes.string.isRequired,
+};
 
 export default Track;
