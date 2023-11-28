@@ -1,0 +1,35 @@
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+header {
+  background-color: rgba(23, 2, 27, 0.712);
+  min-height: 8vh;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  color: white;
+
+  & h1{
+    font-size: 2rem;
+    
+    .highlight {
+      color: #dc61fb;
+    }
+  }
+}
+
+main {
+  background-color: transparent;
+  min-height: 90vh;
+  display: grid;
+  grid-template-columns: 3fr 2fr;
+  grid-template-rows: 1fr;
+  padding: 30px;
+  gap: 10px;
+  grid-template-areas: "results playlist";
+  justify-items: center;
+}

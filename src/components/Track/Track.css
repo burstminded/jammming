@@ -1,0 +1,39 @@
+.track {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    margin: 0 0 1rem 0;
+    padding: 20px 0;
+    width: 100%;
+    border-bottom: 1px solid #ccc;
+    height: 5rem;
+    cursor: pointer;
+    transition: all 0.2s ease-in-out;
+
+    .track-information {
+        display: flex;
+        flex-direction: column;
+        justify-content: space-around;
+        align-items: flex-start;
+        flex-wrap: nowrap;
+
+        & h3 {
+            font-size: 1.3rem;
+            font-weight: 600;
+            color: #fff;
+        }
+
+        & p {
+            font-size: 1.2rem;
+            font-weight: 400;
+            color: #ffffff83;
+        }
+    }
+
+    .track-action {
+        background-color: transparent;
+        border: none;
+        color: #fff;
+        font-size: 1.5rem;
+    }
+}

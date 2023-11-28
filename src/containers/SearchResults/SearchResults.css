@@ -1,0 +1,31 @@
+.results {
+    grid-area: 'results';
+    display: flex;
+    flex-direction: column;
+    flex-wrap: nowrap;
+    justify-content: flex-start;
+    align-items: flex-start;
+    margin: 0 auto;
+    max-width: 1200px;
+    padding: 10px 20px;
+    width: 95%;
+    gap: 10px;
+    background-color: rgba(23, 2, 27, 0.712);
+
+    & h2 {
+        color: #fff;
+        font-size: 2rem;
+    }
+
+    .tracklist {
+        display: flex;
+        flex-direction: column;
+        flex-wrap: nowrap;
+        justify-content: space-between;
+        align-items: flex-start;
+        margin: 10px auto;
+        max-width: 1200px;
+        width: 100%;
+        gap: 10px;
+    }
+}
