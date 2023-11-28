@@ -7,8 +7,8 @@ function Tracklist({ tracksArray, isPlaylist, onAddTrack, onRemoveTrack }) {
     return (
         <div className='tracklist'>
             {tracksArray.map(track => (
-                isPlaylist ? <Track trackName={track.name} key={track.id} artist={track.artist} album={track.album} id={track.id} isPlaylist={isPlaylist} onRemoveTrack={onRemoveTrack} />
-                : <Track trackName={track.name} key={track.id} artist={track.artist} album={track.album} id={track.id} isPlaylist={isPlaylist} onAddTrack={onAddTrack} />
+                isPlaylist ? <Track trackName={track.name} key={track.uris} artist={track.artist} album={track.album} uris={track.uris} isPlaylist={isPlaylist} onRemoveTrack={onRemoveTrack} />
+                : <Track trackName={track.name} key={track.uris} artist={track.artist} album={track.album} uris={track.uris} isPlaylist={isPlaylist} onAddTrack={onAddTrack} />
             ))}
         </div>
     );
@@ -18,7 +18,7 @@ Tracklist.propTypes = {
     tracksArray: PropTypes.arrayOf(
         PropTypes.shape({
             name: PropTypes.string.isRequired,
-            id: PropTypes.string.isRequired,
+            uris: PropTypes.string.isRequired,
             artist: PropTypes.string.isRequired,
             album: PropTypes.string.isRequired
         })

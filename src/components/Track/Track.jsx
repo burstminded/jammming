@@ -3,7 +3,7 @@ import './Track.css';
 import PropTypes from 'prop-types';
 
 
-function Track({ trackName, artist, album, isPlaylist, id, onAddTrack, onRemoveTrack }) {
+function Track({ trackName, artist, album, isPlaylist, uris, onAddTrack, onRemoveTrack }) {
     return (
         <div className='track'>
             <div className='track-information'>
@@ -13,11 +13,11 @@ function Track({ trackName, artist, album, isPlaylist, id, onAddTrack, onRemoveT
             {isPlaylist ?
                 <button
                     className='track-action'
-                    onClick={() => onRemoveTrack(id)}>-</button>
+                    onClick={() => onRemoveTrack(uris)}>-</button>
             : 
                 <button
                     className='track-action'
-                    onClick={() => onAddTrack({name: trackName, artist: artist, album: album, id: id})}>+</button>}
+                    onClick={() => onAddTrack({name: trackName, artist: artist, album: album, uris: uris})}>+</button>}
         </div>
     );
 }
@@ -29,7 +29,7 @@ Track.propTypes = {
     isPlaylist: PropTypes.bool.isRequired,
     onAddTrack: PropTypes.func.isRequired,
     onRemoveTrack: PropTypes.func.isRequired,
-    id: PropTypes.string.isRequired,
+    uris: PropTypes.string.isRequired,
 };
 
 export default Track;

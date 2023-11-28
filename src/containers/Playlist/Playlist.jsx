@@ -3,7 +3,7 @@ import PropTypes from "prop-types";
 import { useState } from "react";
 import "./Playlist.css";
 
-function Playlist({ playlistTracks, onRemoveTrack }) {
+function Playlist({ playlistTracks, onRemoveTrack, onSpotifySave }) {
 
     const [isEditing, setIsEditing] = useState(false);
     const [playlistName, setPlaylistName] = useState('');
@@ -21,7 +21,7 @@ function Playlist({ playlistTracks, onRemoveTrack }) {
         <div className='playlist'>  
             { !isEditing ? <h2 onClick={() => setIsEditing(true)}>{playlistName || 'Playlist'}</h2> : <input type="text" name="playlist-name" id="playlist-name" value={playlistName} onChange={handleChange} onBlur={handleBlur} />}
                 <Tracklist tracksArray={playlistTracks} isPlaylist={true} onRemoveTrack={onRemoveTrack}/>
-            <button className='playlist-save'>SAVE TO SPOTIFY</button>
+            <button className='playlist-save' onClick={() => onSpotifySave({name: playlistName || 'Playlist'})}>SAVE TO SPOTIFY</button>
         </div>
     );
 }
@@ -29,6 +29,7 @@ function Playlist({ playlistTracks, onRemoveTrack }) {
 Playlist.propTypes = {
     playlistTracks: PropTypes.array.isRequired,
     onRemoveTrack: PropTypes.func.isRequired,
+    onSpotifySave: PropTypes.func.isRequired,
 };
 
 export default Playlist;
