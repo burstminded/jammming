@@ -1,160 +1,52 @@
-import { useState } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Playlist from '../Playlist/Playlist';
 import SearchResults from '../SearchResults/SearchResults';
 import SearchBar from '../SearchBar/SearchBar';
+import Spotify from '../../Spotify';
 import './App.css';
 
 function App() {
 
-  const [playlistTracks, setPlayListTracks] = useState([]);
+  const [playlistTracks, setPlaylistTracks] = useState([]);
+  const [searchResults, setSearchResults] = useState([]);
 
-  const [searchResults, setSearchResults] = useState([
-    {
-      name: 'Tiny Dancer',
-      artist: 'Elton John',
-      album: 'Madman Across The Water',
-      uris: 4
+  useEffect(() => {
+    Spotify.getAccessToken();
+  });
+
+  const handleAddTrack = useCallback(
+    (track) => {
+      if (playlistTracks.some((savedTrack) => savedTrack.id === track.id))
+        return;
+
+      setPlaylistTracks((prevTracks) => [...prevTracks, track]);
     },
-    {
-      name: 'Tiny Dancer',
-      artist: 'Tim McGraw',
-      album: 'Love Story',
-      uris: 5
-    },
-    {
-      name: 'Tiny Dancer',
-      artist: 'Rockabye Baby!',
-      album: 'Lullaby Renditions of Elton John',
-      uris: 6
-    },
-    
-    {
-      name: 'Tiny Dancer',
-      artist: 'Elton John',
-      album: 'Madman Across The Water',
-      uris: 1
-  },
-  {
-      name: 'Tiny Dancer',
-      artist: 'Tim McGraw',
-      album: 'Love Story',
-      uris: 2
-  },
-  {
-      name: 'Tiny Dancer',
-      artist: 'Rockabye Baby!',
-      album: 'Lullaby Renditions of Elton John',
-      uris: 3
-  },
-  {
-      name: 'Tiny Dancer',
-      artist: 'Elton John',
-      album: 'Madman Across The Water',
-      uris: 7
-  },
-  {
-      name: 'Tiny Dancer',
-      artist: 'Tim McGraw',
-      album: 'Love Story',
-      uris: 8
-  },
-  {
-      name: 'Tiny Dancer',
-      artist: 'Rockabye Baby!',
-      album: 'Lullaby Renditions of Elton John',
-      uris: 9
-  },
-  {
-      name: 'Tiny Dancer',
-      artist: 'Elton John',
-      album: 'Madman Across The Water',
-      uris: 10
-  },
-  {
-      name: 'Tiny Dancer',
-      artist: 'Tim McGraw',
-      album: 'Love Story',
-      uris: 11
-  },
-  {
-      name: 'Tiny Dancer',
-      artist: 'Rockabye Baby!',
-      album: 'Lullaby Renditions of Elton John',
-      uris: 12
-  },
-  {
-      name: 'Tiny Dancer',
-      artist: 'Elton John',
-      album: 'Madman Across The Water',
-      uris: 13
-  },
-  {
-      name: 'Tiny Dancer',
-      artist: 'Tim McGraw',
-      album: 'Love Story',
-      uris: 14
-  },
-  {
-      name: 'Tiny Dancer',
-      artist: 'Rockabye Baby!',
-      album: 'Lullaby Renditions of Elton John',
-      uris: 15
-  },
-  {
-      name: 'Tiny Dancer',
-      artist: 'Elton John',
-      album: 'Madman Across The Water',
-      uris: 16
-  },
-  {
-      name: 'Tiny Dancer',
-      artist: 'Tim McGraw',
-      album: 'Love Story',
-      uris: 17
-  },
-  {
-      name: 'Tiny Dancer',
-      artist: 'Rockabye Baby!',
-      album: 'Lullaby Renditions of Elton John',
-      uris: 18
-  },
-  {
-      name: 'Tiny Dancer',
-      artist: 'Elton John',
-      album: 'Madman Across The Water',
-      uris: 19
-  }
-]);
+    [playlistTracks]
+  );
 
-const playlistToUpdate= {
-  name: '',
-  tracks: []
-};
+  const handleRemoveTrack = useCallback((track) => {
+    setPlaylistTracks((prevTracks) =>
+      prevTracks.filter((currentTrack) => currentTrack.id !== track.id)
+    );
+  }, []);
 
-  const handleAddTrack = (track) => {
-    if (playlistTracks.find(savedTrack => savedTrack.uris === track.uris)) {
-      return;
-    }
-    setPlayListTracks([...playlistTracks, track])
-  };
+  const handleSpotifySave = useCallback((playlistName) => {
+    const trackUris = playlistTracks.map((track) => track.uri);
+    Spotify.savePlaylist(playlistName, trackUris).then(() => {
+      setPlaylistTracks([]);
+    });
+  }, [playlistTracks]);
 
-  const handleRemoveTrack = (uris) => {
-    const newPlaylist = playlistTracks.filter(track => track.uris !== uris);
-    setPlayListTracks(newPlaylist);
-  };
-
-  const handleSpotifySave = (name) => {
-    playlistToUpdate.name = name;
-    playlistTracks.map(track => playlistToUpdate.tracks.push(track.uris))
-    console.log(playlistToUpdate);
-  }
+  const handleSearch = useCallback((term) => {
+    Spotify.search(term).then(setSearchResults);
+  }, []);
 
   return (
     <>
       <header>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
       </header>
-      <SearchBar />
+      <SearchBar onSearch={handleSearch} />
       <main>
         <SearchResults onAddTrack={handleAddTrack} tracksArray={searchResults} />
         <Playlist onRemoveTrack={handleRemoveTrack} playlistTracks={playlistTracks} onSpotifySave={handleSpotifySave} />

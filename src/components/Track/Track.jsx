@@ -1,35 +1,59 @@
+import { useCallback } from 'react';
 import './Track.css';
-
 import PropTypes from 'prop-types';
 
 
-function Track({ trackName, artist, album, isPlaylist, uris, onAddTrack, onRemoveTrack }) {
+function Track({track, onAddTrack, onRemoveTrack, isPlaylist}) {
+
+    const { name, artist, album } = track;
+
+    const addTrack = useCallback(
+        (e) => {
+            e.preventDefault();
+            onAddTrack(track);
+        },
+        [onAddTrack, track]
+      );
+    
+      const removeTrack = useCallback(
+        (e) => {
+            e.preventDefault();
+            onRemoveTrack(track);
+        },
+        [onRemoveTrack, track]
+      );
+
     return (
         <div className='track'>
             <div className='track-information'>
-                <h3>{trackName}</h3>
+                <h3>{name}</h3>
                 <p>{`${artist} | ${album}`}</p>
             </div>
             {isPlaylist ?
                 <button
                     className='track-action'
-                    onClick={() => onRemoveTrack(uris)}>-</button>
+                    onClick={removeTrack}>-</button>
             : 
                 <button
                     className='track-action'
-                    onClick={() => onAddTrack({name: trackName, artist: artist, album: album, uris: uris})}>+</button>}
+                    onClick={addTrack}>+</button>}
         </div>
     );
 }
 
 Track.propTypes = {
-    trackName: PropTypes.string.isRequired,
-    artist: PropTypes.string.isRequired,
-    album: PropTypes.string.isRequired,
-    isPlaylist: PropTypes.bool.isRequired,
-    onAddTrack: PropTypes.func.isRequired,
-    onRemoveTrack: PropTypes.func.isRequired,
-    uris: PropTypes.string.isRequired,
+    track: PropTypes.shape({
+        name: PropTypes.string.isRequired,
+        artist: PropTypes.string.isRequired,
+        album: PropTypes.string.isRequired,
+        isPlaylist: PropTypes.bool,
+        uris: PropTypes.string
+    }).isRequired,
+    onAddTrack: PropTypes.func,
+    onRemoveTrack: PropTypes.func,
+    uris: PropTypes.string,
+    id: PropTypes.string,
+    isPlaylist: PropTypes.bool,
 };
 
 export default Track;

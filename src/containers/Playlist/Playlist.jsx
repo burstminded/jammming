@@ -17,11 +17,17 @@ function Playlist({ playlistTracks, onRemoveTrack, onSpotifySave }) {
         setPlaylistName(target.value);
     }
 
+    const handleClick = (e) => {
+        e.preventDefault();
+        onSpotifySave(playlistName || 'Playlist');
+        setPlaylistName('');
+    }
+
     return (
         <div className='playlist'>  
             { !isEditing ? <h2 onClick={() => setIsEditing(true)}>{playlistName || 'Playlist'}</h2> : <input type="text" name="playlist-name" id="playlist-name" value={playlistName} onChange={handleChange} onBlur={handleBlur} />}
                 <Tracklist tracksArray={playlistTracks} isPlaylist={true} onRemoveTrack={onRemoveTrack}/>
-            <button className='playlist-save' onClick={() => onSpotifySave({name: playlistName || 'Playlist'})}>SAVE TO SPOTIFY</button>
+            <button className='playlist-save' onClick={handleClick}>SAVE TO SPOTIFY</button>
         </div>
     );
 }

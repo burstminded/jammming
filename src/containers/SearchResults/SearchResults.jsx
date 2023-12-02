@@ -14,7 +14,7 @@ function SearchResults( { tracksArray, onAddTrack } ) {
 }
 
 SearchResults.propTypes = {
-    tracksArray: PropTypes.array.isRequired,
+    tracksArray: PropTypes.array,
     onAddTrack: PropTypes.func.isRequired,
 };
 
