@@ -10,9 +10,9 @@ function App() {
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [searchResults, setSearchResults] = useState([]);
 
-  useEffect(() => {
+  /*useEffect(() => {
     Spotify.getAccessToken();
-  });
+  });*/
 
   const handleAddTrack = useCallback(
     (track) => {
