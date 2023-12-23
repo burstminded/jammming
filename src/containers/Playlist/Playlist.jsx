@@ -25,7 +25,7 @@ function Playlist({ playlistTracks, onRemoveTrack, onSpotifySave }) {
 
     return (
         <div className='playlist'>  
-            { !isEditing ? <h2 onClick={() => setIsEditing(true)}>{playlistName || 'Playlist'}</h2> : <input type="text" name="playlist-name" id="playlist-name" value={playlistName} onChange={handleChange} onBlur={handleBlur} />}
+            { !isEditing ? <h2 onClick={() => setIsEditing(true)}>{playlistName || 'Playlist'}</h2> : <input type="text" name="playlist-name" id="playlist-name" value={playlistName} onChange={handleChange} onBlur={handleBlur} autoComplete="off" />}
                 <Tracklist tracksArray={playlistTracks} isPlaylist={true} onRemoveTrack={onRemoveTrack}/>
             <button className='playlist-save' onClick={handleClick}>SAVE TO SPOTIFY</button>
         </div>
