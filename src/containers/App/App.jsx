@@ -44,7 +44,7 @@ function App() {
   return (
     <>
       <header>
-        <h1>JA<span className="highlight">MMM</span>ING</h1>
+        <h1>Ja<span className="highlight">mmm</span>ing</h1>
       </header>
       <SearchBar onSearch={handleSearch} />
       <main>
