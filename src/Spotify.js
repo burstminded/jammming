@@ -104,7 +104,7 @@ const Spotify = {
 		setTimeout(() => {
 			this.getRefreshToken();
 			console.log("refreshed");
-		}, 1000);
+		}, 3600000);
 	},
 
 	search(term) {
