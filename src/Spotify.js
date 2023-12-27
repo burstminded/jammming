@@ -1,6 +1,5 @@
 const clientId = "a40da5c2d6f14b0ba1a0c0eb7a19a393"; // Insert client ID here.
 const redirectUri = "https://burstminded.github.io/jammming/"; // Have to add this to your accepted Spotify redirect URIs on the Spotify API.
-let accessToken;
 const scope = "user-read-private user-read-email";
 const authUrl = new URL("https://accounts.spotify.com/authorize");
 
@@ -25,9 +24,10 @@ const base64encode = (input) => {
 };
 
 const Spotify = {
+	accessToken: null,
 	async authorize() {
-		if (accessToken) {
-			return accessToken;
+		if (this.accessToken) {
+			return this.accessToken;
 		}
 		const codeVerifier = generateRandomString(64);
 		const hashed = await sha256(codeVerifier);
@@ -52,8 +52,8 @@ const Spotify = {
 	},
 
 	async getAccessToken(code) {
-		if (accessToken) {
-			return accessToken;
+		if (this.accessToken) {
+			return this.accessToken;
 		}
 		const url = "https://accounts.spotify.com/api/token";
 		let codeVerifier = localStorage.getItem("code_verifier");
@@ -75,7 +75,7 @@ const Spotify = {
 		const response = await body.json();
 		localStorage.setItem("access_token", response.access_token);
 		localStorage.setItem("refresh_token", response.refresh_token);
-		accessToken = response.access_token;
+		this.accessToken = response.access_token;
 	},
 
 	async getRefreshToken() {
@@ -96,7 +96,7 @@ const Spotify = {
 		const body = await fetch(url, payload);
 		const response = await body.json();
 
-		localStorage.setItem("access_token", response.accessToken);
+		localStorage.setItem("access_token", response.this.accessToken);
 		localStorage.setItem("refresh_token", response.refreshToken);
 	},
 
@@ -108,10 +108,9 @@ const Spotify = {
 	},
 
 	search(term) {
-		const accessToken = Spotify.getAccessToken();
 		return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
 			headers: {
-				Authorization: `Bearer ${accessToken}`,
+				Authorization: `Bearer ${this.accessToken}`,
 			},
 		})
 			.then((response) => {
@@ -135,9 +134,7 @@ const Spotify = {
 		if (!name || !trackUris.length) {
 			return;
 		}
-
-		const accessToken = Spotify.getAccessToken();
-		const headers = { Authorization: `Bearer ${accessToken}` };
+		const headers = { Authorization: `Bearer ${this.accessToken}` };
 		let userId;
 
 		return fetch("https://api.spotify.com/v1/me", { headers: headers })
