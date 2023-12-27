@@ -24,11 +24,8 @@ const base64encode = (input) => {
 };
 
 const Spotify = {
-	accessToken: false,
+	accessToken: localStorage.getItem("access_token"),
 	async authorize() {
-		if (this.accessToken) {
-			return this.accessToken;
-		}
 		const codeVerifier = generateRandomString(64);
 		const hashed = await sha256(codeVerifier);
 		const codeChallenge = base64encode(hashed);
@@ -109,9 +106,10 @@ const Spotify = {
 	},
 
 	search(term) {
+		let token = localStorage.getItem("access_token");
 		return fetch(`https://api.spotify.com/v1/search?type=track&q=${term}`, {
 			headers: {
-				Authorization: `Bearer ${this.accessToken}`,
+				Authorization: `Bearer ${token}`,
 			},
 		})
 			.then((response) => {
@@ -132,10 +130,11 @@ const Spotify = {
 	},
 
 	savePlaylist(name, trackUris) {
+		let token = localStorage.getItem("access_token");
 		if (!name || !trackUris.length) {
 			return;
 		}
-		const headers = { Authorization: `Bearer ${this.accessToken}` };
+		const headers = { Authorization: `Bearer ${token}` };
 		let userId;
 
 		return fetch("https://api.spotify.com/v1/me", { headers: headers })

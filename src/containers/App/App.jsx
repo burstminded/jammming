@@ -9,9 +9,10 @@ function App() {
 
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [searchResults, setSearchResults] = useState([]); 
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(localStorage.getItem('access_token') ? true : false);
 
-  const handleAutorize = () => {
+  const handleAutorize = (e) => {
+    e.preventDefault();
     const accessCode = Spotify.authorize();
     Spotify.getAccessToken(accessCode);
     setIsAuthorized(true);
@@ -49,7 +50,7 @@ function App() {
       <header>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
       </header>
-      {isAuthorized ? <SearchBar onSearch={handleSearch} /> : <button onClick={handleAutorize}>Login with Spotify</button>}
+      {isAuthorized ? <SearchBar onSearch={handleSearch} /> : <button onClick={e => handleAutorize(e)}>Login with Spotify</button>}
       <main>
         <SearchResults onAddTrack={handleAddTrack} tracksArray={searchResults} />
         <Playlist onRemoveTrack={handleRemoveTrack} playlistTracks={playlistTracks} onSpotifySave={handleSpotifySave} />
