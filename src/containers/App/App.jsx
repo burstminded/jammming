@@ -11,6 +11,7 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
+    if(Spotify.accessToken) return;
     const code = Spotify.authorize();
     Spotify.getAccessToken(code).then(() => {
       Spotify.getMe().then((user) => {
