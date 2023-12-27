@@ -55,6 +55,7 @@ const Spotify = {
 		if (this.accessToken) {
 			return this.accessToken;
 		}
+		this.authorize();
 		const url = "https://accounts.spotify.com/api/token";
 		let codeVerifier = localStorage.getItem("code_verifier");
 
@@ -76,6 +77,7 @@ const Spotify = {
 		localStorage.setItem("access_token", response.access_token);
 		localStorage.setItem("refresh_token", response.refresh_token);
 		this.accessToken = response.access_token;
+		console.log(response);
 	},
 
 	async getRefreshToken() {
