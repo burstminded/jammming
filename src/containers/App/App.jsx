@@ -1,4 +1,4 @@
-import { useState, useCallback, useEffect } from 'react';
+import { useState, useCallback } from 'react';
 import Playlist from '../Playlist/Playlist';
 import SearchResults from '../SearchResults/SearchResults';
 import SearchBar from '../SearchBar/SearchBar';
@@ -8,17 +8,13 @@ import './App.css';
 function App() {
 
   const [playlistTracks, setPlaylistTracks] = useState([]);
-  const [searchResults, setSearchResults] = useState([]);
+  const [searchResults, setSearchResults] = useState([]); 
+  const [isAuthorized, setIsAuthorized] = useState(false);
 
-  useEffect(() => {
-    if(Spotify.accessToken) return;
-    const code = Spotify.authorize();
-    Spotify.getAccessToken(code).then(() => {
-      Spotify.getMe().then((user) => {
-        console.log(user);
-      });
-    });
-  });
+  const handleAutorize = () => {
+    Spotify.getAccessToken();
+    setIsAuthorized(true);
+  }
 
   const handleAddTrack = useCallback(
     (track) => {
@@ -52,7 +48,7 @@ function App() {
       <header>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
       </header>
-      <SearchBar onSearch={handleSearch} />
+      {isAuthorized ? <SearchBar onSearch={handleSearch} /> : <button onClick={handleAutorize}>Login with Spotify</button>}
       <main>
         <SearchResults onAddTrack={handleAddTrack} tracksArray={searchResults} />
         <Playlist onRemoveTrack={handleRemoveTrack} playlistTracks={playlistTracks} onSpotifySave={handleSpotifySave} />
