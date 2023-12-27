@@ -9,7 +9,7 @@ function App() {
 
   const [playlistTracks, setPlaylistTracks] = useState([]);
   const [searchResults, setSearchResults] = useState([]); 
-  const [isAuthorized, setIsAuthorized] = useState(false);
+  const [isAuthorized, setIsAuthorized] = useState(Spotify.accessToken ? true : false);
 
   const handleAutorize = (e) => {
     e.preventDefault();
