@@ -24,7 +24,7 @@ const base64encode = (input) => {
 };
 
 const Spotify = {
-	accessToken: localStorage.getItem("access_token"),
+	accessToken: false,
 	async authorize() {
 		if (this.accessToken) {
 			return this.accessToken;
@@ -55,7 +55,6 @@ const Spotify = {
 		if (this.accessToken) {
 			return this.accessToken;
 		}
-		this.authorize();
 		const url = "https://accounts.spotify.com/api/token";
 		let codeVerifier = localStorage.getItem("code_verifier");
 
@@ -106,7 +105,7 @@ const Spotify = {
 		setTimeout(() => {
 			this.getRefreshToken();
 			console.log("refreshed");
-		}, 3600000);
+		}, 1000);
 	},
 
 	search(term) {

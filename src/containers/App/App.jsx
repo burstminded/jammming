@@ -12,7 +12,8 @@ function App() {
   const [isAuthorized, setIsAuthorized] = useState(false);
 
   const handleAutorize = () => {
-    Spotify.getAccessToken();
+    const accessCode = Spotify.authorize();
+    Spotify.getAccessToken(accessCode);
     setIsAuthorized(true);
   }
 
