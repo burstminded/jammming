@@ -48,7 +48,7 @@ const Spotify = {
 		window.location.href = authUrl.toString();
 		const urlParams = new URLSearchParams(window.location.search);
 		let code = urlParams.get("code");
-		await this.getAccessToken(code);
+		return code;
 	},
 
 	async getAccessToken(code) {
@@ -103,7 +103,8 @@ const Spotify = {
 	refreshToken() {
 		setTimeout(() => {
 			this.getRefreshToken();
-		}, 3600000);
+			console.log("refreshed");
+		}, 1000);
 	},
 
 	search(term) {
