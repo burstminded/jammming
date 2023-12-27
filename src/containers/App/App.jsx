@@ -11,7 +11,12 @@ function App() {
   const [searchResults, setSearchResults] = useState([]);
 
   useEffect(() => {
-    Spotify.getAccessToken();
+    const code = Spotify.authorize();
+    Spotify.getAccessToken(code).then(() => {
+      Spotify.getMe().then((user) => {
+        console.log(user);
+      });
+    });
   });
 
   const handleAddTrack = useCallback(
