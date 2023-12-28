@@ -24,7 +24,6 @@ const base64encode = (input) => {
 };
 
 const Spotify = {
-	accessToken: localStorage.getItem("access_token"),
 	async authorize() {
 		const codeVerifier = generateRandomString(64);
 		const hashed = await sha256(codeVerifier);
@@ -70,7 +69,6 @@ const Spotify = {
 		const response = await body.json();
 		localStorage.setItem("access_token", response.access_token);
 		localStorage.setItem("refresh_token", response.refresh_token);
-		this.accessToken = response.access_token;
 		console.log(response);
 	},
 
@@ -92,15 +90,15 @@ const Spotify = {
 		const body = await fetch(url, payload);
 		const response = await body.json();
 
-		localStorage.setItem("access_token", response.this.accessToken);
+		localStorage.setItem("access_token", response.accessToken);
 		localStorage.setItem("refresh_token", response.refreshToken);
 	},
 
 	refreshToken() {
-		setTimeout(() => {
+		setInterval(() => {
 			this.getRefreshToken();
 			console.log("refreshed");
-		}, 1000);
+		}, 600000);
 	},
 
 	search(term) {
