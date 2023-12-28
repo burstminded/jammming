@@ -13,7 +13,7 @@ function App() {
 
   useEffect(() => {
     // Check if the user is already authorized
-    const storedIsAuthorized = localStorage.getItem('isAuthorized');
+    const storedIsAuthorized = false;
     if (storedIsAuthorized) {
       setIsAuthorized(true);
     }
