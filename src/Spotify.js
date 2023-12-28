@@ -48,10 +48,8 @@ const Spotify = {
 		return code;
 	},
 
-	async getAccessToken(code) {
-		if (this.accessToken) {
-			return this.accessToken;
-		}
+	async getAccessToken() {
+		const code = await this.authorize();
 		const url = "https://accounts.spotify.com/api/token";
 		let codeVerifier = localStorage.getItem("code_verifier");
 
