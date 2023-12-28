@@ -1,4 +1,4 @@
-import { useState, useCallback } from 'react';
+import { useState, useCallback, useEffect } from 'react';
 import Playlist from '../Playlist/Playlist';
 import SearchResults from '../SearchResults/SearchResults';
 import SearchBar from '../SearchBar/SearchBar';
@@ -11,11 +11,21 @@ function App() {
   const [searchResults, setSearchResults] = useState([]); 
   const [isAuthorized, setIsAuthorized] = useState(false);
 
-  const handleAutorize = (e) => {
+  useEffect(() => {
+    // Check if the user is already authorized
+    const storedIsAuthorized = localStorage.getItem('isAuthorized');
+    if (storedIsAuthorized) {
+      setIsAuthorized(true);
+    }
+  }, []);
+
+  const handleAuthorize = (e) => {
     e.preventDefault();
     Spotify.getAccessToken();
     setIsAuthorized(true);
-  }
+    // Store the authorization state in localStorage
+    localStorage.setItem('isAuthorized', true);
+  };
 
   const handleAddTrack = useCallback(
     (track) => {
@@ -49,7 +59,7 @@ function App() {
       <header>
         <h1>Ja<span className="highlight">mmm</span>ing</h1>
       </header>
-      {isAuthorized ? <SearchBar onSearch={handleSearch} /> : <button onClick={e => handleAutorize(e)}>Login with Spotify</button>}
+      {isAuthorized ? <SearchBar onSearch={handleSearch} /> : <button onClick={e => handleAuthorize(e)}>Login with Spotify</button>}
       <main>
         <SearchResults onAddTrack={handleAddTrack} tracksArray={searchResults} />
         <Playlist onRemoveTrack={handleRemoveTrack} playlistTracks={playlistTracks} onSpotifySave={handleSpotifySave} />
