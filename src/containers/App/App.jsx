@@ -12,18 +12,38 @@ function App() {
   const [isAuthorized, setIsAuthorized] = useState(false);
 
   useEffect(() => {
-    // Check if the user is already authorized
-    const storedIsAuthorized = false;
-    if (storedIsAuthorized) {
-      setIsAuthorized(true);
-    }
+    const handleLoad = () => {
+    getToken(); // your getToken function
+  };
+
+  window.addEventListener('load', handleLoad);
+
+  // Clean up the event listener
+  return () => {
+    window.removeEventListener('load', handleLoad);
+  };
   }, []);
 
-  const handleAuthorize = (e) => {
+  async function getToken() {
+    const storedIsAuthorized = localStorage.getItem('isAuthorized');
+    const urlParams = new URLSearchParams(window.location.search);
+    let code = urlParams.get("code");
+      if(storedIsAuthorized && code) {
+        const urlParams = new URLSearchParams(window.location.search);
+        let code = urlParams.get("code");
+        await Spotify.getAccessToken(code);
+        Spotify.refreshToken();
+        setIsAuthorized(storedIsAuthorized);
+      } else {
+        setIsAuthorized(false);
+        localStorage.setItem('isAuthorized', false);
+      }
+    }
+
+  const handleAuthorize = async (e) => {
     e.preventDefault();
-    Spotify.getAccessToken();
-    setIsAuthorized(true);
-    // Store the authorization state in localStorage
+    Spotify.reset();
+    await Spotify.authorize();
     localStorage.setItem('isAuthorized', true);
   };
 

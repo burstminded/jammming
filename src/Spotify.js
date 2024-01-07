@@ -1,6 +1,6 @@
 const clientId = "a40da5c2d6f14b0ba1a0c0eb7a19a393"; // Insert client ID here.
 const redirectUri = "https://burstminded.github.io/jammming/"; // Have to add this to your accepted Spotify redirect URIs on the Spotify API.
-const scope = "user-read-private user-read-email";
+const scope = "user-read-private user-read-email playlist-modify-private playlist-modify-public";
 const authUrl = new URL("https://accounts.spotify.com/authorize");
 
 const generateRandomString = (length) => {
@@ -24,7 +24,15 @@ const base64encode = (input) => {
 };
 
 const Spotify = {
+
+	reset () {
+		localStorage.removeItem("access_token");
+		localStorage.removeItem("refresh_token");
+		localStorage.removeItem("code_verifier");
+	},
+	
 	async authorize() {
+
 		const codeVerifier = generateRandomString(64);
 		const hashed = await sha256(codeVerifier);
 		const codeChallenge = base64encode(hashed);
@@ -42,15 +50,16 @@ const Spotify = {
 
 		authUrl.search = new URLSearchParams(params).toString();
 		window.location.href = authUrl.toString();
-		const urlParams = new URLSearchParams(window.location.search);
-		let code = urlParams.get("code");
-		return code;
 	},
 
-	async getAccessToken() {
-		const code = await this.authorize();
-		const url = "https://accounts.spotify.com/api/token";
+	async getAccessToken(code) {
+		const token = localStorage.getItem("access_token");
 		let codeVerifier = localStorage.getItem("code_verifier");
+		console.log(token);
+		if ( token !== null) {
+			return;
+		}
+		const url = "https://accounts.spotify.com/api/token";
 
 		const payload = {
 			method: "POST",
@@ -66,10 +75,10 @@ const Spotify = {
 			}),
 		};
 		const body = await fetch(url, payload);
-		const response = await body.json();
-		localStorage.setItem("access_token", response.access_token);
-		localStorage.setItem("refresh_token", response.refresh_token);
+		const response =await body.json();
 		console.log(response);
+		localStorage.setItem('access_token', response.access_token);
+		localStorage.setItem('refresh_token', response.refresh_token);
 	},
 
 	async getRefreshToken() {
@@ -89,9 +98,9 @@ const Spotify = {
 		};
 		const body = await fetch(url, payload);
 		const response = await body.json();
-
-		localStorage.setItem("access_token", response.accessToken);
-		localStorage.setItem("refresh_token", response.refreshToken);
+		console.log(response);
+		localStorage.setItem("access_token", response.access_token);
+		localStorage.setItem("refresh_token", response.refresh_token);
 	},
 
 	refreshToken() {
